@@ -33,39 +33,11 @@ const discordPost = (message) => {
     });
 }
 
-// Create Slack-formatted message and send it to the Slack webhook.
-const slackPost = (message) => {
-    let newMessage = {
-        'username': config.username,
-        'icon_emoji': ':card_file_box:',
-        'text': 'New push to ' + message.repo + ' by ' + message.username + '.',
-        'attachments': [{
-    		"title": message.hash,
-            "title_link": message.link,
-            "text": message.commit
-        }]
-    }
-
-    request({
-        url: config.slackEndpoint,
-        method: 'POST',
-        json: true,
-        body: newMessage
-    }, function(error, response, body) {
-        console.log('Slack message sent.');
-        //console.log(response);
-    });
-}
-
 // Figure out which endpoints are configured.
 const post = (message) => {
     console.log('Posting message...');
-    if(config.discordEndpoint) {
-        discordPost(message);
-    }
-    if(config.slackEndpoint) {
-        slackPost(message);
-    }
+    discordPost(message);
+    
 }
 
 // Debug to see if your server's config'd correctly.
@@ -93,11 +65,7 @@ app.post('/', function(req,res) {
 
 // Start listening on the configured port.
 app.listen(config.port, function () {
-  console.log(config.name + ' running on port ' + config.port + '.');
-  if(config.discordEndpoint && config.slackEndpoint) {
-    console.log('Running in Discord and Slack mode.');
-  }
-  else if(config.discordEndpoint) { console.log('Running in Discord mode.') }
-  else if(config.slackEndpoint) { console.log('Running in Slack mode.') }
+  console.log(config.username + ' running on port ' + config.port + '.');
+  if(config.discordEndpoint) { console.log('Running in Discord mode.') }
   else { console.log('Endpoints not configured.') }
 });
