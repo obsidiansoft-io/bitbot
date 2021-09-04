@@ -1,6 +1,5 @@
 module.exports = {
     'username' : 'BitBot',
-    'port' : 6969,
+    'port' : 7700,
     'discordEndpoint' : '',
-    'slackEndpoint' : ''
 };
